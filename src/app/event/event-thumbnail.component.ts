@@ -1,43 +1,23 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'event-thumbnail',
   template: `
-<div class="well hoverwell thumbnail">
-  <h2>{{event?.name}}</h2>
-  <div>Date: {{event?.date}}</div>
-  <div [ngStyle]="getStartTimeStyle()" [ngSwitch]="event?.time">
-    Time: {{event?.time}}
-    <span *ngSwitchCase="'8:00 am'">(Early Start)</span>
-    <span *ngSwitchCase="'10:00 am'">(Late Start)</span>
-    <span *ngSwitchDefault>(Normal Start)</span>
-  </div>
-  <div>Price: \${{event?.price}}</div>
-  <div *ngIf="event?.location">
-    <span>Location: {{event?.location?.address}}</span>
-    <span class="pad-left">{{event?.location?.city}}, {{event?.location?.country}}</span>
-  </div>
-  <div *ngIf="event?.onlineUrl">
-    Online URL: {{event?.onlineUrl}}
-  </div>
-</div>`,
+<button type="button" class="btn btn-sm btn-block btn-default" (click)="handleClick()">Click Me!</button>
+`,
   styles: [`
-    .thumbnail { min-height: 210px; }
-    .pad-left { margin-left: 10px; }
-    .well div { color: #bbb; }
+    .button { width: 210px; }
   `]
 })
 
 export class EventThumbnailComponent implements OnInit {
   @Input() event: any;
+  @Output() eventClick = new EventEmitter();
   constructor() { }
 
   ngOnInit() { }
-  getStartTimeStyle() {
-    // tslint:disable-next-line:curly
-    if (this.event && this.event.time === '8:00 am')
-      return { color: '#003300', 'font-weight': 'bold' };
-    return {};
+  handleClick() {
+    console.log(this.event.name);
   }
 }

@@ -2,25 +2,52 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   template: `
-  <div>
+ <div class="container">
     <h1>Upcoming Angular 2 Events</h1>
     <hr/>
     <div class="row">
         <div *ngFor="let event of events" class="col-md-5">
-             <event-thumbnail [event]="events"></event-thumbnail>
+            <div class="well hoverwell thumbnail">
+                <h2>{{event?.name}}</h2>
+                <div>Date: {{event?.date}}</div>
+                <div [ngStyle]="getStartTimeStyle()" [ngSwitch]="event?.time">
+                    Time: {{event?.time}}
+                    <span *ngSwitchCase="'8:00 am'">(Early Start)</span>
+                    <span *ngSwitchCase="'10:00 am'">(Late Start)</span>
+                    <span *ngSwitchDefault>(Normal Start)</span>
+                </div>
+                <div>Price: \${{event?.price}}</div>
+                <div *ngIf="event?.location">
+                    <span>Location: {{event?.location?.address}}</span>
+                    <span class="pad-left">{{event?.location?.city}}, {{event?.location?.country}}</span>
+                </div>
+                <div *ngIf="event?.onlineUrl">
+                    Online URL: {{event?.onlineUrl}}
+                </div>
+                <event-thumbnail (eventClick)="handleClick($event)"></event-thumbnail>
+            </div>
+
         </div>
     </div>
 </div>
+
   `
 })
 export class EventComponent implements OnInit {
+  event: any;
 
   constructor() { }
 
   ngOnInit() {
   }
- // tslint:disable-next-line:member-ordering
- events = [
+  getStartTimeStyle() {
+    // tslint:disable-next-line:curly
+    if (this.event && this.event.time === '8:00 am')
+      return { color: '#003300', 'font-weight': 'bold' };
+    return {};
+  }
+  // tslint:disable-next-line:member-ordering
+  events = [
     {
       id: 1,
       name: 'Angular Connect',
@@ -40,9 +67,9 @@ export class EventComponent implements OnInit {
           presenter: 'Peter Bacon Darwin',
           duration: 1,
           level: 'Intermediate',
-          abstract: `Learn all about the new pipes in Angular 4, both 
-          how to write them, and how to get the new AI CLI to write 
-          them for you. Given by the famous PBD, president of Angular 
+          abstract: `Learn all about the new pipes in Angular 4, both
+          how to write them, and how to get the new AI CLI to write
+          them for you. Given by the famous PBD, president of Angular
           University (formerly Oxford University)`,
           voters: ['bradgreen', 'igorminar', 'martinfowler']
         },
@@ -52,9 +79,9 @@ export class EventComponent implements OnInit {
           presenter: 'Jeff Cross',
           duration: 1,
           level: 'Intermediate',
-          abstract: `We all know that our dev teams work hard, but with 
-          the right management they can be even more productive, without 
-          overworking them. In this session I'll show you how to get the 
+          abstract: `We all know that our dev teams work hard, but with
+          the right management they can be even more productive, without
+          overworking them. In this session I'll show you how to get the
           best results from the talent you already have on staff.`,
           voters: ['johnpapa', 'bradgreen', 'igorminar', 'martinfowler']
         },
@@ -64,10 +91,10 @@ export class EventComponent implements OnInit {
           presenter: 'Rob Wormald',
           duration: 2,
           level: 'Advanced',
-          abstract: `Angular 4 Performance is hot. In this session, we'll see 
-          how Angular gets such great performance by preloading data on 
-          your users devices before they even hit your site using the 
-          new predictive algorithms and thought reading software 
+          abstract: `Angular 4 Performance is hot. In this session, we'll see
+          how Angular gets such great performance by preloading data on
+          your users devices before they even hit your site using the
+          new predictive algorithms and thought reading software
           built into Angular 4.`,
           voters: []
         },
@@ -77,11 +104,11 @@ export class EventComponent implements OnInit {
           presenter: 'Brad Green',
           duration: 2,
           level: 'Advanced',
-          abstract: `Even though Angular 5 is still 6 years away, we all want 
-          to know all about it so that we can spend endless hours in meetings 
-          debating if we should use Angular 4 or not. This talk will look at 
-          Angular 6 even though no code has yet been written for it. We'll 
-          look at what it might do, and how to convince your manager to 
+          abstract: `Even though Angular 5 is still 6 years away, we all want
+          to know all about it so that we can spend endless hours in meetings
+          debating if we should use Angular 4 or not. This talk will look at
+          Angular 6 even though no code has yet been written for it. We'll
+          look at what it might do, and how to convince your manager to
           hold off on any new apps until it's released`,
           voters: []
         },
